@@ -3,10 +3,7 @@ package com.gathadi.ajay.ecommerce.controller;
 import com.gathadi.ajay.ecommerce.model.Category;
 import com.gathadi.ajay.ecommerce.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +23,12 @@ public class CategoryController {
     public String createCategory(@RequestBody Category category) {
         categoryService.createCategory(category);
         return "Category successfully added";
+    }
+
+    @DeleteMapping("/api/admin/categories/{categoryId}")
+    public String deleteCategory(@PathVariable("categoryId") Long categoryId) {
+        categoryService.deleteCategory(categoryId);
+        return "Category successfully deleted";
     }
 
 }
