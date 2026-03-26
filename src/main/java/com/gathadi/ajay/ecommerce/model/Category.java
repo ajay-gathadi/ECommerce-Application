@@ -1,7 +1,5 @@
 package com.gathadi.ajay.ecommerce.model;
 
-import java.util.logging.Logger;
-
 public class Category {
     private Long categoryId;
     private String categoryName;
