@@ -1,19 +1,21 @@
 package com.gathadi.ajay.ecommerce.model;
 
+import java.util.logging.Logger;
+
 public class Category {
-    private String categoryId;
+    private Long categoryId;
     private String categoryName;
 
-    public Category(String categoryId, String categoryName) {
+    public Category(Long categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
     }
 
-    public String getCategoryId() {
+    public long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
     }
 
