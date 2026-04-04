@@ -31,6 +31,6 @@ public class CategoryServiceImplementation implements CategoryService{
         if (!removed) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
         }
-        return "Category with categoryId: " + categoryId + "deleted successfully.";
+        return "Category with categoryId: " + categoryId + " deleted successfully.";
     }
 }
