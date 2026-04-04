@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class CategoryController {
@@ -34,8 +35,21 @@ public class CategoryController {
         return new ResponseEntity<>("Category Added successfully", HttpStatus.CREATED);
     }
 
+    @PutMapping("/api/public/categories/{categoryId}")
+    public ResponseEntity<String> updateCategory(@RequestBody Category category, @PathVariable Long categoryId) {
+
+        try {
+            Category updatedCategory = categoryService.updateCategory(category, categoryId);
+            return new ResponseEntity<>("Category with categoryId: " +updatedCategory.getCategoryId() +
+                    " updated successfully.", HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
+        }
+
+    }
+
     @DeleteMapping("/api/admin/categories/{categoryId}")
-    public ResponseEntity<String> deleteCategory(@PathVariable("categoryId") Long categoryId) {
+    public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId) {
         try {
             String status = categoryService.deleteCategory(categoryId);
             return new ResponseEntity<String>(status, HttpStatus.OK);
