@@ -1,7 +1,9 @@
 package com.gathadi.ajay.ecommerce.service;
 
 import com.gathadi.ajay.ecommerce.model.Category;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,7 @@ public class CategoryServiceImplementation implements CategoryService{
     public String deleteCategory(Long categoryId) {
         boolean removed = categories.removeIf(category -> category.getCategoryId() == categoryId);
         if (!removed) {
-            return "Category not found!!";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
         }
         return "Category with categoryId: " + categoryId + "deleted successfully.";
     }
