@@ -20,6 +20,11 @@ public class CategoryController {
     @GetMapping("/api/public/categories")
     public ResponseEntity<List<Category>> getAllCategories() {
         List<Category> allCategories = categoryService.getAllCategories();
+
+        if(allCategories.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
         return new ResponseEntity<>(allCategories, HttpStatus.OK);
     }
 
