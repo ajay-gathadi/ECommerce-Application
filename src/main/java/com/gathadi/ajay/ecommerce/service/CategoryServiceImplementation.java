@@ -15,9 +15,6 @@ import java.util.Optional;
 @Component
 public class CategoryServiceImplementation implements CategoryService {
 
-//    private final List<Category> categories = new ArrayList<>();
-    public long nextId = 1;
-
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -28,7 +25,6 @@ public class CategoryServiceImplementation implements CategoryService {
 
     @Override
     public void createCategory(Category category) {
-        category.setCategoryId(nextId++);
         categoryRepository.save(category);
     }
 
