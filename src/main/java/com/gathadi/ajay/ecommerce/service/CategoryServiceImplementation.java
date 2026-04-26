@@ -1,5 +1,6 @@
 package com.gathadi.ajay.ecommerce.service;
 
+import com.gathadi.ajay.ecommerce.exceptions.ResourceNotFoundException;
 import com.gathadi.ajay.ecommerce.model.Category;
 import com.gathadi.ajay.ecommerce.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class CategoryServiceImplementation implements CategoryService {
         Optional<Category> optionalCategory =  categoryRepository.findById(categoryId);
 
         if(optionalCategory.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+            throw new ResourceNotFoundException("Category","categoryId",categoryId);
         }
         categoryRepository.deleteById(categoryId);
         return "Category with categoryId: " + categoryId + " deleted successfully.";
@@ -50,7 +51,7 @@ public class CategoryServiceImplementation implements CategoryService {
             categoryRepository.save(currentCategory);
             return currentCategory;
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+            throw new ResourceNotFoundException("Category", "categoryName", category.getCategoryName());
         }
     }
 }
