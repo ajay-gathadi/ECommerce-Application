@@ -22,7 +22,12 @@ public class CategoryServiceImplementation implements CategoryService {
 
     @Override
     public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAll();
+
+        if(categories.isEmpty()){
+            throw new APIException("There are no categories present");
+        }
+        return categories;
     }
 
     @Override
