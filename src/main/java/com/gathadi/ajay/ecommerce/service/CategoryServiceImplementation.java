@@ -25,7 +25,7 @@ public class CategoryServiceImplementation implements CategoryService {
         List<Category> categories = categoryRepository.findAll();
 
         if(categories.isEmpty()){
-            throw new APIException("There are no categories present");
+            throw new APIException("There are no categories present", HttpStatus.NOT_FOUND);
         }
         return categories;
     }
@@ -34,7 +34,7 @@ public class CategoryServiceImplementation implements CategoryService {
     public void createCategory(Category category) {
         Category newCategory = categoryRepository.findByCategoryName(category.getCategoryName());
         if(newCategory != null){
-            throw new APIException("Category with categoryName: " + category.getCategoryName() + " already exists.");
+            throw new APIException("Category with categoryName: " + category.getCategoryName() + " already exists.",  HttpStatus.CONFLICT);
         }
         categoryRepository.save(category);
     }
@@ -61,7 +61,7 @@ public class CategoryServiceImplementation implements CategoryService {
             categoryRepository.save(currentCategory);
             return currentCategory;
         } else {
-            throw new ResourceNotFoundException("Category", "categoryName", category.getCategoryName());
+            throw new ResourceNotFoundException("Category", "categoryId", categoryId);
         }
     }
 }
