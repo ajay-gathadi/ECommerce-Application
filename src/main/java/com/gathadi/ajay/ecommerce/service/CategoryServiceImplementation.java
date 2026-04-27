@@ -1,5 +1,6 @@
 package com.gathadi.ajay.ecommerce.service;
 
+import com.gathadi.ajay.ecommerce.exceptions.APIException;
 import com.gathadi.ajay.ecommerce.exceptions.ResourceNotFoundException;
 import com.gathadi.ajay.ecommerce.model.Category;
 import com.gathadi.ajay.ecommerce.repository.CategoryRepository;
@@ -26,6 +27,10 @@ public class CategoryServiceImplementation implements CategoryService {
 
     @Override
     public void createCategory(Category category) {
+        Category newCategory = categoryRepository.findByCategoryName(category.getCategoryName());
+        if(newCategory != null){
+            throw new APIException("Category with categoryName: " + category.getCategoryName() + " already exists.");
+        }
         categoryRepository.save(category);
     }
 
