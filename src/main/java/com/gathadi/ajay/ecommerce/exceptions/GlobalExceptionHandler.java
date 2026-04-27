@@ -34,7 +34,6 @@ public class GlobalExceptionHandler  {
 
     @ExceptionHandler(APIException.class)
     public ResponseEntity<String> apiException(APIException apie){
-        String message = apie.getMessage();
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apie.getMessage(), apie.getStatusCode());
     }
 }
