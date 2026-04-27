@@ -1,6 +1,8 @@
 package com.gathadi.ajay.ecommerce.repository;
 
 import com.gathadi.ajay.ecommerce.model.Category;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -10,4 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
     so I never have to write the implementation manually.
  */
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+    Category findByCategoryName(String categoryName);
 }
