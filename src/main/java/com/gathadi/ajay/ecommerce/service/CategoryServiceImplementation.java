@@ -3,14 +3,14 @@ package com.gathadi.ajay.ecommerce.service;
 import com.gathadi.ajay.ecommerce.exceptions.APIException;
 import com.gathadi.ajay.ecommerce.exceptions.ResourceNotFoundException;
 import com.gathadi.ajay.ecommerce.model.Category;
+import com.gathadi.ajay.ecommerce.payload.CategoryDTO;
+import com.gathadi.ajay.ecommerce.payload.CategoryResponse;
 import com.gathadi.ajay.ecommerce.repository.CategoryRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.text.html.Option;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,14 +20,24 @@ public class CategoryServiceImplementation implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
-    public List<Category> getAllCategories() {
+    public CategoryResponse getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
 
         if(categories.isEmpty()){
             throw new APIException("There are no categories present", HttpStatus.NOT_FOUND);
         }
-        return categories;
+
+        List<CategoryDTO> categoryDTOS = categories.stream()
+                .map(currentCategory -> modelMapper.map(currentCategory, CategoryDTO.class))
+                .toList();
+
+        CategoryResponse categoryResponse = new CategoryResponse();
+        categoryResponse.setContent(categoryDTOS);
+        return categoryResponse;
     }
 
     @Override
