@@ -1,6 +1,7 @@
 package com.gathadi.ajay.ecommerce.controller;
 
 import com.gathadi.ajay.ecommerce.model.Category;
+import com.gathadi.ajay.ecommerce.payload.CategoryDTO;
 import com.gathadi.ajay.ecommerce.payload.CategoryResponse;
 import com.gathadi.ajay.ecommerce.service.CategoryService;
 import jakarta.validation.Valid;
@@ -22,9 +23,9 @@ public class CategoryController {
     }
 
     @PostMapping("/public/categories")
-    public ResponseEntity<String> createCategory(@Valid @RequestBody Category category) {
-        categoryService.createCategory(category);
-        return new ResponseEntity<>("Category " + category.getCategoryName() + " added successfully", HttpStatus.CREATED);
+    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
+        CategoryDTO createCategory = categoryService.createCategory(categoryDTO);
+        return new ResponseEntity<>(createCategory, HttpStatus.CREATED);
     }
 
     @PutMapping("/public/categories/{categoryId}")
