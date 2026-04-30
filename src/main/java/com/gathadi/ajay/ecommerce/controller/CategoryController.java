@@ -1,15 +1,13 @@
 package com.gathadi.ajay.ecommerce.controller;
 
 import com.gathadi.ajay.ecommerce.model.Category;
+import com.gathadi.ajay.ecommerce.payload.CategoryResponse;
 import com.gathadi.ajay.ecommerce.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -19,7 +17,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/public/categories")
-    public ResponseEntity<List<Category>> getAllCategories() {
+    public ResponseEntity<CategoryResponse> getAllCategories() {
         return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
