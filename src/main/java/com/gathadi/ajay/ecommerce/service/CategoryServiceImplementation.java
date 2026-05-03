@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class CategoryServiceImplementation implements CategoryService {
@@ -56,28 +55,20 @@ public class CategoryServiceImplementation implements CategoryService {
     }
 
     @Override
-    public String deleteCategory(Long categoryId) {
-        Optional<Category> optionalCategory =  categoryRepository.findById(categoryId);
-
-        if(optionalCategory.isEmpty()){
-            throw new ResourceNotFoundException("Category","categoryId",categoryId);
-        }
+    public CategoryDTO deleteCategory(Long categoryId) {
+        Category categoryToBeDeleted = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
         categoryRepository.deleteById(categoryId);
-        return "Category with categoryId: " + categoryId + " deleted successfully.";
+        return modelMapper.map(categoryToBeDeleted, CategoryDTO.class);
     }
 
     @Override
     public CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId) {
+        Category currentCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
 
-        Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
-
-        if (optionalCategory.isPresent()) {
-            Category currentCategory = optionalCategory.get();
-            currentCategory.setCategoryName(categoryDTO.getCategoryName());
-            categoryRepository.save(currentCategory);
-            return modelMapper.map(currentCategory, CategoryDTO.class);
-        } else {
-            throw new ResourceNotFoundException("Category", "categoryId", categoryId);
-        }
+        currentCategory.setCategoryName(categoryDTO.getCategoryName());
+        categoryRepository.save(currentCategory);
+        return modelMapper.map(currentCategory, CategoryDTO.class);
     }
 }
