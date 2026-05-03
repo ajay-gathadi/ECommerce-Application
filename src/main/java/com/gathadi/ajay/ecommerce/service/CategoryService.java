@@ -6,6 +6,6 @@ import com.gathadi.ajay.ecommerce.payload.CategoryResponse;
 public interface CategoryService {
     public CategoryResponse getAllCategories();
     CategoryDTO createCategory(CategoryDTO category);
-    String deleteCategory(Long categoryId);
+    CategoryDTO deleteCategory(Long categoryId);
     CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId);
 }
