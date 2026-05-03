@@ -1,6 +1,5 @@
 package com.gathadi.ajay.ecommerce.controller;
 
-import com.gathadi.ajay.ecommerce.model.Category;
 import com.gathadi.ajay.ecommerce.payload.CategoryDTO;
 import com.gathadi.ajay.ecommerce.payload.CategoryResponse;
 import com.gathadi.ajay.ecommerce.service.CategoryService;
@@ -29,11 +28,10 @@ public class CategoryController {
     }
 
     @PutMapping("/public/categories/{categoryId}")
-    public ResponseEntity<String> updateCategory(@Valid @RequestBody Category category, @PathVariable Long categoryId) {
+    public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long categoryId) {
 
-        Category updatedCategory = categoryService.updateCategory(category, categoryId);
-        return new ResponseEntity<>("Category with categoryId: " + updatedCategory.getCategoryId() +
-                " updated successfully.", HttpStatus.OK);
+        CategoryDTO updatedCategory = categoryService.updateCategory(categoryDTO, categoryId);
+        return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/categories/{categoryId}")
