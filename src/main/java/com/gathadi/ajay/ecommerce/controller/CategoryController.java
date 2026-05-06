@@ -1,5 +1,6 @@
 package com.gathadi.ajay.ecommerce.controller;
 
+import com.gathadi.ajay.ecommerce.config.AppConstants;
 import com.gathadi.ajay.ecommerce.payload.CategoryDTO;
 import com.gathadi.ajay.ecommerce.payload.CategoryResponse;
 import com.gathadi.ajay.ecommerce.service.CategoryService;
@@ -18,8 +19,8 @@ public class CategoryController {
 
     @GetMapping("/public/categories")
     public ResponseEntity<CategoryResponse> getAllCategories(
-            @RequestParam(name = "pageNumber") Integer pageNumber,
-            @RequestParam(name = "pageSize") Integer pageSize
+            @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize
     ) {
         return new ResponseEntity<>(categoryService.getAllCategories(pageNumber, pageSize), HttpStatus.OK);
     }
