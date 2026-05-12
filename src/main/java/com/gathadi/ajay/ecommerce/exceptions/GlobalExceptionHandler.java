@@ -1,5 +1,6 @@
 package com.gathadi.ajay.ecommerce.exceptions;
 
+import com.gathadi.ajay.ecommerce.payload.APIResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -27,13 +28,16 @@ public class GlobalExceptionHandler  {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> resourceNotFoundException(ResourceNotFoundException rnfe){
+    public ResponseEntity<APIResponse> resourceNotFoundException(ResourceNotFoundException rnfe){
         String message = rnfe.getMessage();
-        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        APIResponse apiResponse = new APIResponse(message, false);
+        return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(APIException.class)
-    public ResponseEntity<String> apiException(APIException apie){
-        return new ResponseEntity<>(apie.getMessage(), apie.getStatusCode());
+    public ResponseEntity<APIResponse> apiException(APIException apie){
+        String message = apie.getMessage();
+        APIResponse apiResponse = new APIResponse(message, false);
+        return new ResponseEntity<>(apiResponse, apie.getStatusCode());
     }
 }
