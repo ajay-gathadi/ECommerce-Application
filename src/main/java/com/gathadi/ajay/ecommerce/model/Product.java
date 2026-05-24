@@ -1,9 +1,6 @@
 package com.gathadi.ajay.ecommerce.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,8 +14,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
     private String productName;
+    private String productImage;
     private String productDescription;
     private Integer productQuantity;
     private double productPrice;
+    private double discount;
     private double productSpecialPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 }
