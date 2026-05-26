@@ -4,11 +4,14 @@ import com.gathadi.ajay.ecommerce.exceptions.ResourceNotFoundException;
 import com.gathadi.ajay.ecommerce.model.Category;
 import com.gathadi.ajay.ecommerce.model.Product;
 import com.gathadi.ajay.ecommerce.payload.ProductDTO;
+import com.gathadi.ajay.ecommerce.payload.ProductResponse;
 import com.gathadi.ajay.ecommerce.repository.CategoryRepository;
 import com.gathadi.ajay.ecommerce.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProductServiceImplementation implements ProductService{
@@ -31,5 +34,18 @@ public class ProductServiceImplementation implements ProductService{
         Product savedProduct = productRepository.save(product);
 
         return modelMapper.map(savedProduct, ProductDTO.class);
+    }
+
+    @Override
+    public ProductResponse getAllProducts() {
+        List<Product> productList =  productRepository.findAll();
+
+        List<ProductDTO> productDTOS = productList.stream()
+                .map(eachProduct -> modelMapper.map(eachProduct, ProductDTO.class))
+                .toList();
+
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setProducts(productDTOS);
+        return productResponse;
     }
 }
