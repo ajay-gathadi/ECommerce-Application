@@ -2,6 +2,7 @@ package com.gathadi.ajay.ecommerce.controller;
 
 import com.gathadi.ajay.ecommerce.model.Product;
 import com.gathadi.ajay.ecommerce.payload.ProductDTO;
+import com.gathadi.ajay.ecommerce.payload.ProductResponse;
 import com.gathadi.ajay.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,12 @@ public class ProductController {
         ProductDTO productToBeSaved = productService.addProduct(product, categoryId);
 
         return new ResponseEntity<>(productToBeSaved, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/public/products")
+    public ResponseEntity<ProductResponse> getAllProducts(){
+        ProductResponse productResponse = productService.getAllProducts();
+        return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
 
 }
