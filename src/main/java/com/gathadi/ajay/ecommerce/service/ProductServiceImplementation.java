@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductServiceImplementation implements ProductService{
+public class ProductServiceImplementation implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
@@ -38,7 +38,7 @@ public class ProductServiceImplementation implements ProductService{
 
     @Override
     public ProductResponse getAllProducts() {
-        List<Product> productList =  productRepository.findAll();
+        List<Product> productList = productRepository.findAll();
 
         List<ProductDTO> productDTOS = productList.stream()
                 .map(eachProduct -> modelMapper.map(eachProduct, ProductDTO.class))
@@ -51,12 +51,24 @@ public class ProductServiceImplementation implements ProductService{
 
     @Override
     public ProductResponse getProductsByCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId",  categoryId));
-        System.out.println("getProductsByCategory" +category);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
 
         List<Product> productList = productRepository.findByCategoryOrderByProductPriceAsc(category);
         List<ProductDTO> productDTOS = productList.stream()
                 .map(eachProduct -> modelMapper.map(eachProduct, ProductDTO.class))
+                .toList();
+
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setProducts(productDTOS);
+        return productResponse;
+    }
+
+    @Override
+    public ProductResponse searchProductsByKeyword(String keyword) {
+        List<Product> productList = productRepository.findByProductNameLikeIgnoreCase("%" + keyword + "%");
+
+        List<ProductDTO> productDTOS = productList.stream()
+                .map(currentProduct -> modelMapper.map(currentProduct, ProductDTO.class))
                 .toList();
 
         ProductResponse productResponse = new ProductResponse();
