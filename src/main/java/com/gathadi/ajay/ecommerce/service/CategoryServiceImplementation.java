@@ -47,7 +47,7 @@ public class CategoryServiceImplementation implements CategoryService {
                 .toList();
 
         CategoryResponse categoryResponse = new CategoryResponse();
-        categoryResponse.setContent(categoryDTOS);
+        categoryResponse.setCategories(categoryDTOS);
         categoryResponse.setPageNumber(categoryPage.getNumber());
         categoryResponse.setPageSize(categoryPage.getSize());
         categoryResponse.setTotalElements(categoryPage.getTotalElements());
