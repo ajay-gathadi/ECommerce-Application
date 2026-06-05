@@ -1,11 +1,8 @@
 package com.gathadi.ajay.ecommerce.service;
 
-import com.gathadi.ajay.ecommerce.model.Product;
 import com.gathadi.ajay.ecommerce.payload.ProductDTO;
 import com.gathadi.ajay.ecommerce.payload.ProductResponse;
-import org.springframework.stereotype.Service;
 
-@Service
 public interface ProductService {
     ProductDTO addProduct(ProductDTO productDTO, Long category);
 
@@ -15,7 +12,9 @@ public interface ProductService {
 
     ProductResponse searchProductsByKeyword(String keyword);
 
-    ProductDTO updateProduct(Product product, Long productId);
+    ProductDTO updateProduct(ProductDTO productDTO, Long productId);
 
     ProductDTO deleteProduct(Long productId);
+
+    ProductDTO patchProduct(ProductDTO productDTO, Long productId);
 }
