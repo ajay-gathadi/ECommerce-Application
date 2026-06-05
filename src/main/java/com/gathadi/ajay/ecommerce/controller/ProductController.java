@@ -40,9 +40,15 @@ public class ProductController {
     }
 
     @PutMapping("/admin/product/{productId}")
-    public ResponseEntity<ProductDTO> updateProduct(@RequestBody Product product, @PathVariable Long productId) {
-        ProductDTO updatedProduct = productService.updateProduct(product, productId);
+    public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO, @PathVariable Long productId) {
+        ProductDTO updatedProduct = productService.updateProduct(productDTO, productId);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+    }
+
+    @PatchMapping("/admin/product/{productId}")
+    public ResponseEntity<ProductDTO> patchProduct(@RequestBody ProductDTO productDTO, @PathVariable Long productId){
+        ProductDTO patchedProduct = productService.patchProduct(productDTO, productId);
+        return new ResponseEntity<>(patchedProduct, HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/product/{productId}")
