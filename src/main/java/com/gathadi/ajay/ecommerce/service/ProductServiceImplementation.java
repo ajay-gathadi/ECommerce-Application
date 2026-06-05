@@ -78,7 +78,8 @@ public class ProductServiceImplementation implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(Product product, Long productId) {
+    public ProductDTO updateProduct(ProductDTO productDTO, Long productId) {
+        Product product = modelMapper.map(productDTO, Product.class);
         Product productToBeUpdated = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
 
@@ -90,7 +91,52 @@ public class ProductServiceImplementation implements ProductService {
         productToBeUpdated.setProductSpecialPrice(product.getProductPrice() - ((product.getProductDiscount() * 0.01) * product.getProductPrice()));
 
         Product savedProduct = productRepository.save(productToBeUpdated);
-        return modelMapper.map(savedProduct, ProductDTO.class);
+        return mapToDTO(savedProduct);
+    }
+
+    @Override
+    public ProductDTO patchProduct(ProductDTO productDTO, Long productId) {
+        Product productToBePatched = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+
+        if(productDTO.getProductName() != null){
+            productToBePatched.setProductName(productDTO.getProductName());
+        }
+
+        if (productDTO.getProductImage() != null) {
+            productToBePatched.setProductImage(productDTO.getProductImage());
+        }
+
+        if(productDTO.getProductDescription() != null){
+            productToBePatched.setProductDescription(productDTO.getProductDescription());
+        }
+
+        if(productDTO.getProductQuantity() != null){
+            productToBePatched.setProductQuantity(productDTO.getProductQuantity());
+        }
+
+        if (productDTO.getProductPrice() != null) {
+            productToBePatched.setProductPrice(productDTO.getProductPrice());
+        }
+
+        if(productDTO.getProductDiscount() != null){
+            double price = productDTO.getProductPrice() != null ?
+                    productDTO.getProductPrice() : productToBePatched.getProductPrice();
+
+            productToBePatched.setProductDiscount(productDTO.getProductDiscount());
+            productToBePatched.setProductSpecialPrice(
+                    price - (productDTO.getProductDiscount() * 0.01)  * price
+            );
+        }
+
+        if(productDTO.getCategoryId() != null){
+            Category category = categoryRepository.findById(productDTO.getCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId",  productDTO.getCategoryId()));
+
+            productToBePatched.setCategory(category);
+        }
+
+        Product savedProduct = productRepository.save(productToBePatched);
+        return mapToDTO(savedProduct);
     }
 
     @Override
