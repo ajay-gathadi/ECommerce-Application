@@ -10,6 +10,7 @@ import com.gathadi.ajay.ecommerce.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -80,8 +81,7 @@ public class ProductServiceImplementation implements ProductService {
     @Override
     public ProductDTO updateProduct(ProductDTO productDTO, Long productId) {
         Product product = modelMapper.map(productDTO, Product.class);
-        Product productToBeUpdated = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+        Product productToBeUpdated = findProductById(productId);
 
         productToBeUpdated.setProductName(product.getProductName());
         productToBeUpdated.setProductDescription(product.getProductDescription());
@@ -96,7 +96,7 @@ public class ProductServiceImplementation implements ProductService {
 
     @Override
     public ProductDTO patchProduct(ProductDTO productDTO, Long productId) {
-        Product productToBePatched = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+        Product productToBePatched = findProductById(productId);
 
         if(productDTO.getProductName() != null){
             productToBePatched.setProductName(productDTO.getProductName());
@@ -139,11 +139,21 @@ public class ProductServiceImplementation implements ProductService {
         return mapToDTO(savedProduct);
     }
 
+//    @Override
+//    public ProductDTO updateProductImage(Long productId, MultipartFile image) {
+//        Product product = findProductById(productId);
+//    }
+
+
     @Override
     public ProductDTO deleteProduct(Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+        Product product = findProductById(productId);
         productRepository.delete(product);
         return modelMapper.map(product, ProductDTO.class);
+    }
+
+    private Product findProductById(Long productId) {
+        return productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
     }
 
     private ProductDTO mapToDTO(Product product){
