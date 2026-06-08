@@ -38,7 +38,7 @@ public class ProductServiceImplementation implements ProductService {
 
     @Override
     public ProductDTO addProduct(ProductDTO productDTO, Long categoryId) {
-        if(!productRepository.findByProductNameLikeIgnoreCase(productDTO.getProductName()).isEmpty()){
+        if(productRepository.existsByProductNameIgnoreCase(productDTO.getProductName())){
             throw new APIException("Product with the same name already exists", HttpStatus.CONFLICT);
         }
 
