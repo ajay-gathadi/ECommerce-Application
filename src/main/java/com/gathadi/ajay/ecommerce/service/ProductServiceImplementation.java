@@ -1,5 +1,6 @@
 package com.gathadi.ajay.ecommerce.service;
 
+import com.gathadi.ajay.ecommerce.exceptions.APIException;
 import com.gathadi.ajay.ecommerce.exceptions.ResourceNotFoundException;
 import com.gathadi.ajay.ecommerce.model.Category;
 import com.gathadi.ajay.ecommerce.model.Product;
@@ -9,15 +10,13 @@ import com.gathadi.ajay.ecommerce.repository.CategoryRepository;
 import com.gathadi.ajay.ecommerce.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ProductServiceImplementation implements ProductService {
@@ -31,8 +30,18 @@ public class ProductServiceImplementation implements ProductService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private FileService fileService;
+
+    @Value("${project.images.directory}")
+    private String path;
+
     @Override
     public ProductDTO addProduct(ProductDTO productDTO, Long categoryId) {
+        if(!productRepository.findByProductNameLikeIgnoreCase(productDTO.getProductName()).isEmpty()){
+            throw new APIException("Product with the same name already exists", HttpStatus.CONFLICT);
+        }
+
         Product product = modelMapper.map(productDTO, Product.class);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
 
@@ -46,6 +55,10 @@ public class ProductServiceImplementation implements ProductService {
     @Override
     public ProductResponse getAllProducts() {
         List<Product> productList = productRepository.findAll();
+
+        if(productList.isEmpty()){
+            throw new APIException("No products found", HttpStatus.NOT_FOUND);
+        }
 
         List<ProductDTO> productDTOS = productList.stream()
                 .map(eachProduct -> modelMapper.map(eachProduct, ProductDTO.class))
@@ -147,8 +160,7 @@ public class ProductServiceImplementation implements ProductService {
     @Override
     public ProductDTO updateProductImage(Long productId, MultipartFile image) throws IOException {
         Product product = findProductById(productId);
-        String path = "images";
-        String fileName = uploadImage(path, image);
+        String fileName = fileService.uploadImage(path, image);
         product.setProductImage(fileName);
         productRepository.save(product);
         return mapToDTO(product);
@@ -168,31 +180,5 @@ public class ProductServiceImplementation implements ProductService {
 
     private ProductDTO mapToDTO(Product product){
         return modelMapper.map(product, ProductDTO.class);
-    }
-
-    private String uploadImage(String path, MultipartFile image) throws IOException {
-        String originalFilename = image.getOriginalFilename();
-
-        String randomId = UUID.randomUUID().toString();
-
-        if(originalFilename == null || originalFilename.isBlank()){
-            throw new IllegalArgumentException("Uploaded file must have a valid name");
-        }
-
-        int dotIndex = originalFilename.lastIndexOf('.');
-        if(dotIndex == -1){
-            throw new IllegalArgumentException("Uploaded file must have an extension");
-        }
-
-        String fileName = randomId.concat(originalFilename.substring(originalFilename.lastIndexOf('.')));
-        String filePath = path + File.separator + fileName;
-
-        File folder = new File(path);
-        if(!folder.exists()){
-            folder.mkdirs();
-        }
-
-        Files.copy(image.getInputStream(), Paths.get(filePath));
-        return fileName;
     }
 }
