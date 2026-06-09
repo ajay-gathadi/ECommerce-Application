@@ -13,7 +13,7 @@ public class ProductResponse {
     private List<ProductDTO> products;
     private Integer pageNumber;
     private Integer pageSize;
-    private Integer totalProducts;
+    private Long totalProducts;
     private Integer totalPages;
     private boolean lastPage;
 }
