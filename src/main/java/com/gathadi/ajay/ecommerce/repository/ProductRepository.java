@@ -11,7 +11,7 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findProductsByCategory(Category category, Pageable pageable);
 
-    List<Product> findByProductNameLikeIgnoreCase(String keyword);
+    Page<Product> findByProductNameLikeIgnoreCase(String keyword, Pageable pageable);
 
     boolean existsByProductNameIgnoreCase(String productName);
 }
