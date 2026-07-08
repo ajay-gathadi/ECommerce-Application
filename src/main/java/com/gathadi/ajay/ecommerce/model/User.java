@@ -21,11 +21,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Column(unique = true)
     @NotBlank
     @Size(max = 20)
     private String username;
 
     @Email
+    @Column(unique = true)
     @NotBlank
     @Size(max = 50)
     private String email;
