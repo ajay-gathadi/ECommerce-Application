@@ -1,11 +1,14 @@
 package com.gathadi.ajay.ecommerce.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Table(name = "roles")
+@Getter
+@Setter
 @NoArgsConstructor
 public class Role {
     @Id
@@ -19,5 +22,17 @@ public class Role {
 
     public Role(AppRole roleName) {
         this.roleName = roleName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Role role)) return false;
+        return roleId != null && roleId.equals(role.getRoleId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
