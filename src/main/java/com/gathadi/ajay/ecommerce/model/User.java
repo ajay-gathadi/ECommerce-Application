@@ -41,7 +41,7 @@ public class User {
         this.email = email;
         this.password = password;
     }
-    
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_role",
@@ -53,7 +53,7 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
-        return userId != null && userId.equals(user.getUserId());
+        return getUserId() != null && getUserId().equals(user.getUserId());
     }
 
     @Override
