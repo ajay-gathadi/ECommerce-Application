@@ -49,6 +49,11 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "user",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            orphanRemoval = true)
+    private Set<Product> products = new HashSet<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,6 +63,28 @@ public class User {
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return 31;
+    }
+
+    // --- Synchronization Helper Methods ---
+
+    public void addProduct(Product product) {
+        this.products.add(product);
+        product.setUser(this); // Synchronizes the owning side
+    }
+
+    public void removeProduct(Product product) {
+        this.products.remove(product);
+        product.setUser(null); // Dereferences the owning side, triggering orphanRemoval
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+        // role.getUsers().add(this); // Required if Role entity has a bidirectional Set<User>
+    }
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+        // role.getUsers().remove(this); // Required if Role entity has a bidirectional Set<User>
     }
 }
