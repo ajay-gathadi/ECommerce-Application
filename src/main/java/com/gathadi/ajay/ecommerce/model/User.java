@@ -8,7 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -54,6 +56,14 @@ public class User {
             orphanRemoval = true)
     private Set<Product> products = new HashSet<>();
 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "users_addresses",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id")
+    )
+    private List<Address> addresses = new ArrayList<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -86,5 +96,15 @@ public class User {
     public void removeRole(Role role) {
         this.roles.remove(role);
         // role.getUsers().remove(this); // Required if Role entity has a bidirectional Set<User>
+    }
+
+    public void addAddress(Address address) {
+        this.addresses.add(address);
+        address.getUsers().add(this); // Synchronizes the inverse side
+    }
+
+    public void removeAddress(Address address) {
+        this.addresses.remove(address);
+        address.getUsers().remove(this); // Dereferences the inverse side
     }
 }
