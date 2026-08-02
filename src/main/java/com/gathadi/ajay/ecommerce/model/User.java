@@ -73,7 +73,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return 31;
+        return getClass().hashCode();
     }
 
     // --- Synchronization Helper Methods ---
