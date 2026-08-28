@@ -3,6 +3,7 @@ package com.gathadi.ajay.ecommerce.security.services;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gathadi.ajay.ecommerce.model.User;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class UserDetailsImplementation implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -44,6 +46,8 @@ public class UserDetailsImplementation implements UserDetails {
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
                 .collect(Collectors.toList());
+
+        log.info("[buildUserDetails]: Creating a UserDetailsImplementation");
 
         return new UserDetailsImplementation(
                 user.getUserId(),
