@@ -83,6 +83,6 @@ public class UserDetailsImplementation implements UserDetails {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return Objects.hashCode(id);
     }
 }
